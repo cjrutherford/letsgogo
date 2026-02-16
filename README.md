@@ -43,7 +43,7 @@ cp .env.example .env
 
 This project uses Turso (LibSQL) for cloud-synced progress tracking. You can run it locally or use Turso cloud:
 
-**Option 1: Local Development (Recommended for getting started)**
+**Option 1: Local Development (Recommended for Getting Started)**
 ```bash
 # The app will use a local SQLite database file
 # No additional setup needed - just use the default .env.example
@@ -72,7 +72,7 @@ This project uses Turso (LibSQL) for cloud-synced progress tracking. You can run
 ### Development
 
 ```bash
-# Start development server (Vite + React)
+# Start development server - Vite + React
 npm run dev
 
 # The app will be available at http://localhost:5173
