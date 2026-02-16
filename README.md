@@ -51,7 +51,19 @@ This project uses Turso (LibSQL) for cloud-synced progress tracking. You can run
 
 **Option 2: Turso Cloud (For production deployment)**
 1. Create a free account at [turso.tech](https://turso.tech)
-2. Install the Turso CLI (review the [installation script](https://get.tur.so/install.sh) first for security):
+2. Install the Turso CLI using one of these methods:
+   
+   **Via Homebrew (recommended for macOS/Linux):**
+   ```bash
+   brew install tursodatabase/tap/turso
+   ```
+   
+   **Via Go (if you have Go installed):**
+   ```bash
+   go install github.com/tursodatabase/turso-cli/cmd/turso@latest
+   ```
+   
+   **Via installation script** (review the [script](https://get.tur.so/install.sh) first):
    ```bash
    curl -sSfL https://get.tur.so/install.sh | bash
    ```
