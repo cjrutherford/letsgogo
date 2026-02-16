@@ -113,55 +113,55 @@ npm run lint
 
 GoZeroToHero contains **11 comprehensive modules** with **44+ interactive lessons** covering everything from Go basics to production deployment:
 
-### 1. **Go Basics** (17 lessons)
+### 1. Go Basics (17 lessons)
 Core Go fundamentals: Hello World, variables, types, functions, control flow, packages, and imports.
 
-### 2. **TypeScript to Go** (3 lessons)
+### 2. TypeScript to Go (3 lessons)
 - Type system comparison and mental models
 - Zero values vs undefined/null
 - Error handling: Go's way vs try/catch
 
-### 3. **Go's Unique Quirks** (3 lessons)
+### 3. Go's Unique Quirks (3 lessons)
 - Values vs pointers: when to use each
 - Slices, arrays, and maps: the tricky parts
 - defer/panic/recover patterns
 
-### 4. **Garbage Collection** (3 lessons)
+### 4. Garbage Collection (3 lessons)
 - How Go's GC works under the hood
 - Escape analysis and stack vs heap
 - Writing GC-friendly code for performance
 
-### 5. **Concurrency (Async)** (3 lessons)
+### 5. Concurrency (Async) (3 lessons)
 - Goroutines 101: lightweight threads
 - Channels: communicating between goroutines
 - Select statement for multiplexing
 
-### 6. **Parallelism** (3 lessons)
+### 6. Parallelism (3 lessons)
 - WaitGroup and Mutex patterns
 - sync/atomic for lock-free operations
 - Understanding and preventing race conditions
 
-### 7. **Testing in Go** (3 lessons)
+### 7. Testing in Go (3 lessons)
 - The testing package and conventions
 - Table-driven tests: the Go way
 - Benchmarks and performance testing
 
-### 8. **Web Services** (3 lessons)
+### 8. Web Services (3 lessons)
 - net/http basics and HTTP servers
 - Building REST APIs
 - Middleware patterns and chaining
 
-### 9. **Standard Library** (3 lessons)
+### 9. Standard Library (3 lessons)
 - fmt, strings, and strconv for formatting
 - io and file handling
 - Essential stdlib packages
 
-### 10. **Popular Packages** (3 lessons)
+### 10. Popular Packages (3 lessons)
 - Web frameworks (Gin, Echo, Chi)
 - Database libraries and ORMs
 - Essential third-party utilities
 
-### 11. **Production Polish** (3 lessons)
+### 11. Production Polish (3 lessons)
 - Profiling and optimization
 - Security best practices
 - Deployment strategies
@@ -185,17 +185,17 @@ Each challenge includes:
 
 ```
 src/content/modules/
-├── basics/          # 17 lessons - Go fundamentals
+├── basics/              # 17 lessons - Go fundamentals
 ├── typescript-to-go/    # 3 lessons - TS → Go migration
-├── quirks/          # 3 lessons - Go's unique features
-├── gc/              # 3 lessons - Garbage collection
-├── concurrency/     # 3 lessons - Goroutines & channels
-├── parallelism/     # 3 lessons - Concurrent programming
-├── testing/         # 3 lessons - Testing patterns
-├── webservices/     # 3 lessons - HTTP & REST
-├── stdlib/          # 3 lessons - Standard library
-├── packages/        # 3 lessons - Third-party packages
-└── polish/          # 3 lessons - Production readiness
+├── quirks/              # 3 lessons - Go's unique features
+├── gc/                  # 3 lessons - Garbage collection
+├── concurrency/         # 3 lessons - Goroutines & channels
+├── parallelism/         # 3 lessons - Concurrent programming
+├── testing/             # 3 lessons - Testing patterns
+├── webservices/         # 3 lessons - HTTP & REST
+├── stdlib/              # 3 lessons - Standard library
+├── packages/            # 3 lessons - Third-party packages
+└── polish/              # 3 lessons - Production readiness
 ```
 
 Each module contains markdown lessons with:

@@ -52,7 +52,7 @@ Thank you for your interest in contributing to GoZeroToHero! This guide will hel
    npm run dev
    ```
 
-7. **Open your browser** to `http://localhost:5173`
+7. **Open your browser** to `http://localhost:5173` (default Vite port - may differ if port is already in use)
 
 ## 📝 Adding New Lessons
 
