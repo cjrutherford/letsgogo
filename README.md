@@ -36,7 +36,7 @@ npm install
 
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your Supabase credentials
+# Edit .env with your Turso/LibSQL credentials (optional for local dev)
 ```
 
 ### Turso/LibSQL Setup
