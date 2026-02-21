@@ -26,6 +26,10 @@ const topicExcerpts: Record<string, string> = {
   'net-http-basics': extractExcerpt(lessonContent['net-http-basics']),
   'fmt-strings-strconv': extractExcerpt(lessonContent['fmt-strings-strconv']),
   'web-frameworks': extractExcerpt(lessonContent['web-frameworks']),
+  'gin-getting-started': extractExcerpt(lessonContent['gin-getting-started']),
+  'echo-getting-started': extractExcerpt(lessonContent['echo-getting-started']),
+  'fiber-getting-started': extractExcerpt(lessonContent['fiber-getting-started']),
+  'chi-getting-started': extractExcerpt(lessonContent['chi-getting-started']),
   'profiling': extractExcerpt(lessonContent['profiling'])
 }
 

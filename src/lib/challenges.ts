@@ -657,7 +657,7 @@ func main() {
     difficulty: 'easy'
   },
 
-  // Packages Module
+  // Packages Module (legacy — kept for backward compat)
   {
     id: 'pkg-01',
     lessonSlug: 'web-frameworks',
@@ -686,6 +686,590 @@ func main() {
       'Use `c.JSON(status, object)` to return JSON'
     ],
     points: 15,
+    difficulty: 'medium'
+  },
+
+  // Gin Module
+  {
+    id: 'gin-01',
+    lessonSlug: 'gin-getting-started',
+    title: 'Gin Path Params',
+    description: 'Write a Gin handler for GET /users/:id that reads the "id" path parameter and prints "User: <id>".',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gin-gonic/gin"
+)
+
+func main() {
+    r := gin.New()
+    
+    r.GET("/users/:id", func(c *gin.Context) {
+        // TODO: read "id" param and print "User: <id>"
+    })
+    
+    // Simulate a call (would normally use r.Run())
+    fmt.Println("Route registered: GET /users/:id")
+}`,
+    expectedOutput: 'Route registered: GET /users/:id',
+    hints: [
+      'Use c.Param("id") to read a named URL parameter',
+      'fmt.Printf("User: %s\\n", id) to print',
+      'gin.New() creates a router without default middleware'
+    ],
+    points: 10,
+    difficulty: 'easy'
+  },
+  {
+    id: 'gin-02',
+    lessonSlug: 'gin-middleware',
+    title: 'Gin Middleware',
+    description: 'Write a Gin middleware function called `requestLogger` that prints the request method and path before calling c.Next(). Register it globally.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gin-gonic/gin"
+)
+
+func requestLogger(c *gin.Context) {
+    // TODO: print method + path, then call c.Next()
+}
+
+func main() {
+    r := gin.New()
+    r.Use(requestLogger)
+    
+    r.GET("/hello", func(c *gin.Context) {
+        c.String(200, "hello")
+    })
+    
+    fmt.Println("Middleware registered")
+}`,
+    expectedOutput: 'Middleware registered',
+    hints: [
+      'fmt.Printf("%s %s\\n", c.Request.Method, c.Request.URL.Path)',
+      'Call c.Next() to pass control to the next handler',
+      'r.Use(middleware) registers global middleware'
+    ],
+    points: 15,
+    difficulty: 'medium'
+  },
+  {
+    id: 'gin-03',
+    lessonSlug: 'gin-request-binding',
+    title: 'Gin JSON Binding',
+    description: 'Define a CreateUserRequest struct with Name (required) and Email (required,email) binding tags. Write a handler that uses ShouldBindJSON and returns 400 on error.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gin-gonic/gin"
+)
+
+type CreateUserRequest struct {
+    // TODO: define Name and Email fields with binding tags
+}
+
+func createUser(c *gin.Context) {
+    var req CreateUserRequest
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(400, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(201, gin.H{"name": req.Name, "email": req.Email})
+}
+
+func main() {
+    r := gin.New()
+    r.POST("/users", createUser)
+    fmt.Println("Binding handler registered")
+}`,
+    expectedOutput: 'Binding handler registered',
+    hints: [
+      'Use \`json:"name" binding:"required"\` struct tags',
+      'ShouldBindJSON reads the JSON body into the struct',
+      'Return early with c.JSON(400,...) if err != nil'
+    ],
+    points: 20,
+    difficulty: 'medium'
+  },
+  {
+    id: 'gin-04',
+    lessonSlug: 'gin-advanced',
+    title: 'Gin Router Groups',
+    description: 'Create a Gin router with a /api/v1 group. Register GET /users and POST /users under that group. Print "API v1 ready".',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gin-gonic/gin"
+)
+
+func main() {
+    r := gin.New()
+    
+    // TODO: create /api/v1 group and register GET/POST /users handlers
+    
+    fmt.Println("API v1 ready")
+}`,
+    expectedOutput: 'API v1 ready',
+    hints: [
+      'Use r.Group("/api/v1") to create the group',
+      'Call group.GET("/users", handler) and group.POST("/users", handler)',
+      'Handlers can be inline closures'
+    ],
+    points: 20,
+    difficulty: 'medium'
+  },
+
+  // Echo Module
+  {
+    id: 'echo-01',
+    lessonSlug: 'echo-getting-started',
+    title: 'Echo Path Params',
+    description: 'Write an Echo handler for GET /users/:id that reads the "id" param and prints "Echo user: <id>".',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "net/http"
+    "github.com/labstack/echo/v4"
+)
+
+func main() {
+    e := echo.New()
+    e.HideBanner = true
+    
+    e.GET("/users/:id", func(c echo.Context) error {
+        // TODO: read param and return JSON {"id": value}
+        return c.JSON(http.StatusOK, echo.Map{})
+    })
+    
+    fmt.Println("Echo route registered")
+}`,
+    expectedOutput: 'Echo route registered',
+    hints: [
+      'Use c.Param("id") to read the path parameter',
+      'Return c.JSON(200, echo.Map{"id": id})',
+      'echo.Map is map[string]any — like gin.H'
+    ],
+    points: 10,
+    difficulty: 'easy'
+  },
+  {
+    id: 'echo-02',
+    lessonSlug: 'echo-middleware',
+    title: 'Echo Custom Middleware',
+    description: 'Write an Echo middleware function `timingMW` that records request start time and logs elapsed time after calling next(c). Register it globally.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "time"
+    "github.com/labstack/echo/v4"
+)
+
+func timingMW(next echo.HandlerFunc) echo.HandlerFunc {
+    return func(c echo.Context) error {
+        start := time.Now()
+        // TODO: call next(c) and log elapsed time
+        return nil
+    }
+}
+
+func main() {
+    e := echo.New()
+    e.HideBanner = true
+    e.Use(timingMW)
+    fmt.Println("Timing middleware registered")
+}`,
+    expectedOutput: 'Timing middleware registered',
+    hints: [
+      'Call err := next(c) to invoke the next handler',
+      'log.Printf("elapsed: %v", time.Since(start))',
+      'Return the error from next(c)'
+    ],
+    points: 15,
+    difficulty: 'medium'
+  },
+  {
+    id: 'echo-03',
+    lessonSlug: 'echo-request-response',
+    title: 'Echo Bind & Validate',
+    description: 'Write an Echo handler that binds a JSON body into a struct using c.Bind. Return 400 on bind error and 201 with the struct on success.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "net/http"
+    "github.com/labstack/echo/v4"
+)
+
+type User struct {
+    Name  string \`json:"name"\`
+    Email string \`json:"email"\`
+}
+
+func createUser(c echo.Context) error {
+    u := new(User)
+    // TODO: bind JSON body, return 400 on error, 201 on success
+    return c.JSON(http.StatusCreated, u)
+}
+
+func main() {
+    e := echo.New()
+    e.HideBanner = true
+    e.POST("/users", createUser)
+    fmt.Println("Echo bind handler ready")
+}`,
+    expectedOutput: 'Echo bind handler ready',
+    hints: [
+      'Use c.Bind(u) to deserialise the JSON body',
+      'Return echo.NewHTTPError(400, err.Error()) on failure',
+      'Return c.JSON(201, u) on success'
+    ],
+    points: 20,
+    difficulty: 'medium'
+  },
+  {
+    id: 'echo-04',
+    lessonSlug: 'echo-advanced',
+    title: 'Echo Route Groups',
+    description: 'Create an Echo app with a /api group that has a custom middleware adding an X-API-Version header. Register GET /status inside the group.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "net/http"
+    "github.com/labstack/echo/v4"
+)
+
+func versionHeader(next echo.HandlerFunc) echo.HandlerFunc {
+    return func(c echo.Context) error {
+        // TODO: set X-API-Version header to "v1"
+        return next(c)
+    }
+}
+
+func main() {
+    e := echo.New()
+    e.HideBanner = true
+    
+    api := e.Group("/api", versionHeader)
+    api.GET("/status", func(c echo.Context) error {
+        return c.JSON(http.StatusOK, echo.Map{"status": "ok"})
+    })
+    
+    fmt.Println("Echo group configured")
+}`,
+    expectedOutput: 'Echo group configured',
+    hints: [
+      'c.Response().Header().Set("X-API-Version", "v1")',
+      'Call next(c) after setting the header',
+      'e.Group(prefix, middleware) creates a scoped group'
+    ],
+    points: 20,
+    difficulty: 'medium'
+  },
+
+  // Fiber Module
+  {
+    id: 'fiber-01',
+    lessonSlug: 'fiber-getting-started',
+    title: 'Fiber Path Params',
+    description: 'Write a Fiber handler for GET /users/:id that reads the "id" param and returns JSON {"id": <value>}.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gofiber/fiber/v2"
+)
+
+func main() {
+    app := fiber.New(fiber.Config{DisableStartupMessage: true})
+    
+    app.Get("/users/:id", func(c *fiber.Ctx) error {
+        // TODO: read id param and return JSON {"id": value}
+        return c.JSON(fiber.Map{})
+    })
+    
+    fmt.Println("Fiber route registered")
+}`,
+    expectedOutput: 'Fiber route registered',
+    hints: [
+      'c.Params("id") reads the named URL parameter',
+      'c.JSON(fiber.Map{"id": id}) sends a JSON response',
+      'fiber.Map is map[string]any'
+    ],
+    points: 10,
+    difficulty: 'easy'
+  },
+  {
+    id: 'fiber-02',
+    lessonSlug: 'fiber-middleware',
+    title: 'Fiber Custom Middleware',
+    description: 'Write a Fiber middleware that adds a "X-Powered-By: Fiber" response header and calls c.Next(). Register it globally.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gofiber/fiber/v2"
+)
+
+func poweredByMiddleware(c *fiber.Ctx) error {
+    // TODO: set X-Powered-By header and call c.Next()
+    return c.Next()
+}
+
+func main() {
+    app := fiber.New(fiber.Config{DisableStartupMessage: true})
+    app.Use(poweredByMiddleware)
+    
+    app.Get("/hello", func(c *fiber.Ctx) error {
+        return c.SendString("hello")
+    })
+    
+    fmt.Println("Fiber middleware registered")
+}`,
+    expectedOutput: 'Fiber middleware registered',
+    hints: [
+      'c.Set("X-Powered-By", "Fiber") sets a response header',
+      'return c.Next() passes to the next handler',
+      'app.Use(fn) registers global middleware'
+    ],
+    points: 15,
+    difficulty: 'easy'
+  },
+  {
+    id: 'fiber-03',
+    lessonSlug: 'fiber-request-response',
+    title: 'Fiber BodyParser',
+    description: 'Write a Fiber POST /users handler that parses a JSON body into a struct using BodyParser. Return 400 on error, 201 on success.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gofiber/fiber/v2"
+)
+
+type CreateUserReq struct {
+    Name  string \`json:"name"\`
+    Email string \`json:"email"\`
+}
+
+func main() {
+    app := fiber.New(fiber.Config{DisableStartupMessage: true})
+    
+    app.Post("/users", func(c *fiber.Ctx) error {
+        req := new(CreateUserReq)
+        // TODO: parse body, return 400 on error, 201 on success
+        return c.Status(201).JSON(req)
+    })
+    
+    fmt.Println("Fiber body parser ready")
+}`,
+    expectedOutput: 'Fiber body parser ready',
+    hints: [
+      'c.BodyParser(req) deserialises the request body',
+      'Return c.Status(400).JSON(fiber.Map{"error": err.Error()}) on failure',
+      'Return c.Status(201).JSON(req) on success'
+    ],
+    points: 20,
+    difficulty: 'medium'
+  },
+  {
+    id: 'fiber-04',
+    lessonSlug: 'fiber-advanced',
+    title: 'Fiber Groups & Error Handler',
+    description: 'Create a Fiber app with a custom ErrorHandler that returns JSON errors. Add a /api group and register GET /ping inside it that returns {"pong": true}.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "github.com/gofiber/fiber/v2"
+)
+
+func main() {
+    app := fiber.New(fiber.Config{
+        DisableStartupMessage: true,
+        ErrorHandler: func(c *fiber.Ctx, err error) error {
+            // TODO: return JSON error response
+            return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+        },
+    })
+    
+    api := app.Group("/api")
+    api.Get("/ping", func(c *fiber.Ctx) error {
+        return c.JSON(fiber.Map{"pong": true})
+    })
+    
+    fmt.Println("Fiber app configured")
+}`,
+    expectedOutput: 'Fiber app configured',
+    hints: [
+      'Use fiber.Config{ErrorHandler: fn} to set a global error handler',
+      'app.Group("/api") creates a prefixed sub-router',
+      'c.JSON(fiber.Map{"pong": true}) sends a JSON response'
+    ],
+    points: 20,
+    difficulty: 'medium'
+  },
+
+  // Chi Module
+  {
+    id: 'chi-01',
+    lessonSlug: 'chi-getting-started',
+    title: 'Chi URL Params',
+    description: 'Write a Chi handler for GET /users/{id} that reads the "id" URL parameter using chi.URLParam and writes it as JSON.',
+    starterCode: `package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "github.com/go-chi/chi/v5"
+)
+
+func main() {
+    r := chi.NewRouter()
+    
+    r.Get("/users/{id}", func(w http.ResponseWriter, r *http.Request) {
+        id := chi.URLParam(r, "id")
+        // TODO: write JSON {"id": id}
+        json.NewEncoder(w).Encode(map[string]string{"id": id})
+    })
+    
+    fmt.Println("Chi route registered")
+}`,
+    expectedOutput: 'Chi route registered',
+    hints: [
+      'chi.URLParam(r, "id") reads the {id} path segment',
+      'Note: Chi uses {param} not :param',
+      'json.NewEncoder(w).Encode(data) writes a JSON response'
+    ],
+    points: 10,
+    difficulty: 'easy'
+  },
+  {
+    id: 'chi-02',
+    lessonSlug: 'chi-middleware',
+    title: 'Chi Middleware',
+    description: 'Write a chi middleware that adds a "X-Request-Source: chi" header to every response and calls next.ServeHTTP.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "net/http"
+    "github.com/go-chi/chi/v5"
+)
+
+func sourceHeader(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // TODO: set X-Request-Source header, then call next
+        next.ServeHTTP(w, r)
+    })
+}
+
+func main() {
+    r := chi.NewRouter()
+    r.Use(sourceHeader)
+    
+    r.Get("/hello", func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte("hello"))
+    })
+    
+    fmt.Println("Chi middleware registered")
+}`,
+    expectedOutput: 'Chi middleware registered',
+    hints: [
+      'w.Header().Set("X-Request-Source", "chi")',
+      'Call next.ServeHTTP(w, r) to proceed',
+      'chi middleware signature is func(http.Handler) http.Handler'
+    ],
+    points: 15,
+    difficulty: 'medium'
+  },
+  {
+    id: 'chi-03',
+    lessonSlug: 'chi-advanced-routing',
+    title: 'Chi Route Groups',
+    description: 'Use r.Route to create a /api sub-router. Inside it, use another r.Route for /users with GET / and POST /. Print "Chi routes configured".',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "net/http"
+    "github.com/go-chi/chi/v5"
+)
+
+func main() {
+    r := chi.NewRouter()
+    
+    r.Route("/api", func(r chi.Router) {
+        r.Route("/users", func(r chi.Router) {
+            r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+                w.Write([]byte("list users"))
+            })
+            r.Post("/", func(w http.ResponseWriter, r *http.Request) {
+                w.Write([]byte("create user"))
+            })
+        })
+    })
+    
+    fmt.Println("Chi routes configured")
+}`,
+    expectedOutput: 'Chi routes configured',
+    hints: [
+      'r.Route(prefix, fn) creates an inline sub-router',
+      'Nest r.Route calls to build hierarchical routes',
+      'Handlers are standard http.HandlerFunc'
+    ],
+    points: 15,
+    difficulty: 'medium'
+  },
+  {
+    id: 'chi-04',
+    lessonSlug: 'chi-patterns',
+    title: 'Chi Context Values',
+    description: 'Write a Chi middleware that stores a "requestID" value in the request context using context.WithValue. Retrieve it in a handler and print it.',
+    starterCode: `package main
+
+import (
+    "context"
+    "fmt"
+    "net/http"
+    "github.com/go-chi/chi/v5"
+)
+
+type ctxKey string
+const reqIDKey ctxKey = "requestID"
+
+func requestIDMiddleware(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // TODO: store "req-001" as requestID in context, call next
+        next.ServeHTTP(w, r)
+    })
+}
+
+func main() {
+    r := chi.NewRouter()
+    r.Use(requestIDMiddleware)
+    r.Get("/id", func(w http.ResponseWriter, r *http.Request) {
+        id, _ := r.Context().Value(reqIDKey).(string)
+        w.Write([]byte(id))
+    })
+    
+    fmt.Println("Chi context pattern ready")
+}`,
+    expectedOutput: 'Chi context pattern ready',
+    hints: [
+      'ctx := context.WithValue(r.Context(), reqIDKey, "req-001")',
+      'r = r.WithContext(ctx) updates the request with the new context',
+      'Retrieve with r.Context().Value(reqIDKey).(string)'
+    ],
+    points: 20,
     difficulty: 'medium'
   },
 
@@ -2187,7 +2771,11 @@ export function getModulePoints(moduleId: string): number {
     'testing': ['testing-package', 'table-tests', 'benchmarks'],
     'webservices': ['net-http-basics', 'rest-apis', 'middleware'],
     'stdlib': ['fmt-strings-strconv', 'encoding-packages', 'net-http-context'],
-    'packages': ['web-frameworks', 'orms-db', 'utilities'],
+    'gin': ['gin-getting-started', 'gin-middleware', 'gin-request-binding', 'gin-advanced'],
+    'echo': ['echo-getting-started', 'echo-middleware', 'echo-request-response', 'echo-advanced'],
+    'fiber': ['fiber-getting-started', 'fiber-middleware', 'fiber-request-response', 'fiber-advanced'],
+    'chi': ['chi-getting-started', 'chi-middleware', 'chi-advanced-routing', 'chi-patterns'],
+    'db-tools': ['orms-db', 'utilities'],
     'polish': ['profiling', 'security', 'deployment']
   }
   
