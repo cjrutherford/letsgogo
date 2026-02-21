@@ -520,6 +520,7 @@ export function Home() {
           initialCode={selectedChallenge.starterCode}
           expectedOutput={selectedChallenge.expectedOutput}
           validationPattern={selectedChallenge.validationPattern}
+          testCode={selectedChallenge.testCode}
           challengeId={selectedChallenge.id}
           points={selectedChallenge.points}
           hints={selectedChallenge.hints}

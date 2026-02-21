@@ -6,6 +6,8 @@ export interface CodeChallenge {
   starterCode: string
   expectedOutput?: string
   validationPattern?: string
+  /** Hidden Go test code run via `go test -v` alongside the learner's solution. */
+  testCode?: string
   hints: string[]
   points: number
   difficulty: 'easy' | 'medium' | 'hard'
@@ -30,6 +32,30 @@ func main() {
     // Create and print a User
 }`,
     expectedOutput: '{1 Alice alice@example.com}',
+    testCode: `package challenge
+
+import (
+    "fmt"
+    "testing"
+)
+
+func TestUserStruct(t *testing.T) {
+    u := User{ID: 1, Name: "Alice", Email: "alice@example.com"}
+    if u.ID != 1 {
+        t.Errorf("User.ID = %d; want 1", u.ID)
+    }
+    if u.Name != "Alice" {
+        t.Errorf("User.Name = %q; want \"Alice\"", u.Name)
+    }
+    if u.Email != "alice@example.com" {
+        t.Errorf("User.Email = %q; want \"alice@example.com\"", u.Email)
+    }
+    got := fmt.Sprintf("%v", u)
+    want := "{1 Alice alice@example.com}"
+    if got != want {
+        t.Errorf("fmt.Sprintf(\"%%v\", u) = %q; want %q", got, want)
+    }
+}`,
     hints: [
       'Use `type User struct { }` to define a struct',
       'Fields are defined as `FieldName FieldType`',
@@ -145,6 +171,31 @@ func main() {
     fmt.Println("Result:", result)
 }`,
     expectedOutput: 'Error: division by zero',
+    testCode: `package challenge
+
+import (
+    "errors"
+    "math"
+    "testing"
+)
+
+func TestDivideErrors(t *testing.T) {
+    result, err := divide(10, 2)
+    if err != nil {
+        t.Fatalf("divide(10, 2): unexpected error: %v", err)
+    }
+    if math.Abs(result-5.0) > 1e-9 {
+        t.Errorf("divide(10, 2) = %f; want 5.0", result)
+    }
+
+    _, err = divide(10, 0)
+    if err == nil {
+        t.Fatal("divide(10, 0): expected error, got nil")
+    }
+    if !errors.Is(err, ErrDivideByZero) {
+        t.Errorf("divide(10, 0): got error %v; want ErrDivideByZero", err)
+    }
+}`,
     hints: [
       'Use `errors.New("message")` to create errors',
       'Return `0, ErrDivideByZero` when divisor is 0',
@@ -176,6 +227,21 @@ func main() {
     // Call Birthday() and print age
 }`,
     expectedOutput: '31',
+    testCode: `package challenge
+
+import "testing"
+
+func TestBirthday(t *testing.T) {
+    p := Person{Name: "Alice", Age: 30}
+    p.Birthday()
+    if p.Age != 31 {
+        t.Errorf("after Birthday(), Age = %d; want 31", p.Age)
+    }
+    p.Birthday()
+    if p.Age != 32 {
+        t.Errorf("after second Birthday(), Age = %d; want 32", p.Age)
+    }
+}`,
     hints: [
       'Use `(p *Person) Birthday()` for pointer receiver',
       'Call with `p.Birthday()` - Go auto-dereferences',
@@ -425,7 +491,7 @@ func TestAdd(t *testing.T) {
         t.Errorf("Add(2, 3) = %d; want 5", result)
     }
 }`,
-    expectedOutput: 'PASS',
+    validationPattern: 'PASS',
     hints: [
       'Define `func Add(a, b int) int { return a + b }`',
       'Tests run with `go test`',
@@ -462,7 +528,7 @@ func TestAddTable(t *testing.T) {
         })
     }
 }`,
-    expectedOutput: 'PASS',
+    validationPattern: 'PASS',
     hints: [
       'Add test cases to the tests slice',
       'Use `tt.name`, `tt.a`, `tt.b`, `tt.want` in the test function',
@@ -489,7 +555,7 @@ func BenchmarkAdd(b *testing.B) {
         Add(1, 2)
     }
 }`,
-    expectedOutput: 'PASS',
+    validationPattern: 'PASS',
     hints: [
       'Benchmark functions start with `Benchmark`',
       'Use `b.N` to get number of iterations',
@@ -917,7 +983,7 @@ func TestMultiply(t *testing.T) {
         })
     }
 }`,
-    expectedOutput: 'PASS',
+    validationPattern: 'PASS',
     hints: [
       'Use t.Run() for subtests',
       'Each subtest gets a clean slate',
@@ -1350,6 +1416,26 @@ func main() {
     fmt.Println(result)
 }`,
     expectedOutput: 'Hello, World!',
+    testCode: `package challenge
+
+import "testing"
+
+func TestGreet(t *testing.T) {
+    cases := []struct {
+        name string
+        want string
+    }{
+        {"World", "Hello, World!"},
+        {"Alice", "Hello, Alice!"},
+        {"Bob", "Hello, Bob!"},
+        {"", "Hello, !"},
+    }
+    for _, c := range cases {
+        if got := greet(c.name); got != c.want {
+            t.Errorf("greet(%q) = %q; want %q", c.name, got, c.want)
+        }
+    }
+}`,
     hints: [
       'Use return "Hello, " + name + "!"',
       'In Go, string concatenation uses +'
@@ -1380,6 +1466,22 @@ func main() {
     fmt.Printf("Result: %.2f", result)
 }`,
     expectedOutput: 'Result: 5.00',
+    testCode: `package challenge
+
+import (
+    "math"
+    "testing"
+)
+
+func TestDivide(t *testing.T) {
+    result, err := divide(10, 2)
+    if err != nil {
+        t.Fatalf("divide(10, 2): unexpected error: %v", err)
+    }
+    if math.Abs(result-5.0) > 1e-9 {
+        t.Errorf("divide(10, 2) = %f; want 5.0", result)
+    }
+}`,
     hints: [
       'Return multiple values with (result, error)',
       'Return a/b, nil when division succeeds'
@@ -1409,6 +1511,27 @@ func main() {
     fmt.Println(checkNumber(0))
 }`,
     expectedOutput: 'positive\nnegative\nzero',
+    testCode: `package challenge
+
+import "testing"
+
+func TestCheckNumber(t *testing.T) {
+    cases := []struct {
+        n    int
+        want string
+    }{
+        {5, "positive"},
+        {-3, "negative"},
+        {0, "zero"},
+        {100, "positive"},
+        {-1, "negative"},
+    }
+    for _, c := range cases {
+        if got := checkNumber(c.n); got != c.want {
+            t.Errorf("checkNumber(%d) = %q; want %q", c.n, got, c.want)
+        }
+    }
+}`,
     hints: [
       'Use if n > 0 { return "positive" }',
       'Use else if n < 0 { return "negative" }',
@@ -1890,13 +2013,96 @@ func BenchmarkHello(b *testing.B) {
         // This runs b.N times
     }
 }`,
-    expectedOutput: 'PASS',
+    validationPattern: 'PASS',
     hints: [
       'Benchmark functions start with Benchmark',
       'b.N is the number of iterations'
     ],
     points: 10,
     difficulty: 'easy'
+  },
+
+  // Advanced Testing Challenges
+  {
+    id: 't-06',
+    lessonSlug: 'testing-package',
+    title: 'Custom Assertion with t.Helper()',
+    description: 'Implement `assertEqual` – a test helper that calls `t.Helper()` so failures show the **caller\'s** line number. Then implement `double` and verify all assertions pass.',
+    starterCode: `package main
+
+import "testing"
+
+// assertEqual checks that got equals want.
+// t.Helper() makes test failures point to the caller, not here.
+func assertEqual(t *testing.T, got, want int) {
+    t.Helper()
+    // TODO: if got != want, call t.Errorf with a descriptive message
+}
+
+func double(n int) int {
+    // TODO: return n doubled
+    return 0
+}
+
+func TestDouble(t *testing.T) {
+    assertEqual(t, double(5),  10)
+    assertEqual(t, double(0),  0)
+    assertEqual(t, double(-3), -6)
+}`,
+    validationPattern: 'PASS',
+    hints: [
+      'Call t.Helper() first inside assertEqual',
+      'Use t.Errorf("got %d, want %d", got, want) for the failure message',
+      'double should return n * 2'
+    ],
+    points: 20,
+    difficulty: 'medium'
+  },
+  {
+    id: 't-07',
+    lessonSlug: 'testing-package',
+    title: 'Spy with Function Variables',
+    description: 'Use a **function variable** as a spy to capture calls made by `processOrder`. Complete `processOrder` so it calls `notify` with `"Order <id> processed"`, then assert the spy recorded the correct call.',
+    starterCode: `package main
+
+import (
+    "fmt"
+    "strconv"
+    "testing"
+)
+
+type NotifyFn func(msg string)
+
+func processOrder(id int, notify NotifyFn) {
+    // TODO: call notify with "Order <id> processed"
+    _ = strconv.Itoa(id) // hint: use strconv.Itoa to convert id to string
+}
+
+func TestProcessOrderSpy(t *testing.T) {
+    var calls []string
+    spy := func(msg string) {
+        calls = append(calls, msg)
+    }
+
+    processOrder(42, spy)
+
+    if len(calls) != 1 {
+        t.Fatalf("expected notify to be called once, got %d calls", len(calls))
+    }
+    want := "Order 42 processed"
+    if calls[0] != want {
+        t.Errorf("notify called with %q; want %q", calls[0], want)
+    }
+    fmt.Println("spy verified")
+}`,
+    validationPattern: 'PASS',
+    hints: [
+      'Call notify("Order " + strconv.Itoa(id) + " processed") inside processOrder',
+      'The spy captures every call in the calls slice',
+      'Use t.Fatalf to abort immediately if the call count is wrong'
+    ],
+    points: 25,
+    difficulty: 'medium'
   },
 
   // Middleware Sub-lessons

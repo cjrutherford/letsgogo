@@ -839,6 +839,7 @@ export function LessonView() {
           initialCode={selectedChallenge.starterCode}
           expectedOutput={selectedChallenge.expectedOutput}
           validationPattern={selectedChallenge.validationPattern}
+          testCode={selectedChallenge.testCode}
           challengeId={selectedChallenge.id}
           title={selectedChallenge.title}
           description={selectedChallenge.description}

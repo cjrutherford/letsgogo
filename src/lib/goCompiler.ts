@@ -6,7 +6,7 @@ export interface CompileResult {
 
 const API_URL = import.meta.env.DEV ? 'http://localhost:3001' : '/api'
 
-export async function compileGo(code: string): Promise<CompileResult> {
+export async function compileGo(code: string, testCode?: string): Promise<CompileResult> {
   try {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 20000)
@@ -16,7 +16,7 @@ export async function compileGo(code: string): Promise<CompileResult> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code, ...(testCode ? { testCode } : {}) }),
       signal: controller.signal
     })
 
