@@ -11,6 +11,7 @@ interface CodePlaygroundProps {
   initialCode?: string
   expectedOutput?: string
   validationPattern?: string
+  testCode?: string
   challengeId?: string
   title?: string
   description?: string
@@ -42,6 +43,7 @@ export function CodePlayground({
   initialCode = DEFAULT_CODE, 
   expectedOutput,
   validationPattern,
+  testCode,
   challengeId,
   title,
   description,
@@ -88,7 +90,7 @@ export function CodePlayground({
     }
   }, [challengeId])
 
-  const isChallengeMode = !!expectedOutput
+  const isChallengeMode = !!expectedOutput || !!validationPattern || !!testCode
 
   const parseErrors = useCallback((errorStrings: string[]): LintError[] => {
     const parsed: LintError[] = []
@@ -114,6 +116,13 @@ export function CodePlayground({
   }, [])
 
   const validateOutput = useCallback((actualOutput: string): boolean => {
+    // For test-based challenges (testCode provided, or validationPattern signals
+    // a Go test run with 'PASS'), verify that `go test` reported a clean pass.
+    const isGoTestValidation = !!testCode || validationPattern === 'PASS'
+    if (isGoTestValidation) {
+      const lines = actualOutput.split('\n').map(l => l.trim())
+      return lines.includes('PASS') && !lines.includes('FAIL')
+    }
     if (expectedOutput && actualOutput.trim() === expectedOutput.trim()) {
       return true
     }
@@ -122,7 +131,7 @@ export function CodePlayground({
       return regex.test(actualOutput.trim())
     }
     return false
-  }, [expectedOutput, validationPattern])
+  }, [expectedOutput, validationPattern, testCode])
 
   const runCode = useCallback(async () => {
     setLoading(true)
@@ -130,7 +139,7 @@ export function CodePlayground({
     setOutput('')
 
     try {
-      const result = await compileGo(code)
+      const result = await compileGo(code, testCode)
 
       if (result.errors.length > 0) {
         const parsed = parseErrors(result.errors)
@@ -267,13 +276,25 @@ export function CodePlayground({
                 {description && (
                   <p className="text-sm text-gray-300 mb-3">{description}</p>
                 )}
-                <p className="text-sm text-amber-400 mb-2">Expected output:</p>
-                <code 
-                  className="block p-2 rounded text-sm font-mono"
-                  style={{ background: 'var(--color-bg-primary)', color: '#10b981' }}
-                >
-                  {expectedOutput}
-                </code>
+                {testCode ? (
+                  <p className="text-sm text-amber-400">
+                    Hidden tests will validate your implementation.
+                  </p>
+                ) : expectedOutput ? (
+                  <>
+                    <p className="text-sm text-amber-400 mb-2">Expected output:</p>
+                    <code 
+                      className="block p-2 rounded text-sm font-mono"
+                      style={{ background: 'var(--color-bg-primary)', color: '#10b981' }}
+                    >
+                      {expectedOutput}
+                    </code>
+                  </>
+                ) : (
+                  <p className="text-sm text-amber-400">
+                    Your tests must pass.
+                  </p>
+                )}
               </div>
             )}
           </div>

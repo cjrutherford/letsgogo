@@ -285,25 +285,56 @@ const modulesData: Module[] = [
     ]
   },
   {
-    id: 'packages',
-    title: 'Popular Packages',
-    description: 'Essential third-party libraries',
+    id: 'gin',
+    title: 'Gin Framework',
+    description: 'Fast, featureful HTTP router with middleware, binding, and validation',
     lessons: [
-      { 
-        id: 'pkg-01', 
-        module_id: 'packages', 
-        title: 'Web Frameworks', 
-        slug: 'web-frameworks', 
-        order: 1, 
-        content: '',
-        subLessons: [
-          { id: 'pkg-01a', title: 'Gin Framework', slug: 'gin-framework' },
-          { id: 'pkg-01b', title: 'Echo Framework', slug: 'echo-framework' },
-          { id: 'pkg-01c', title: 'Fiber Framework', slug: 'fiber-framework' },
-        ]
-      },
-      { id: 'pkg-02', module_id: 'packages', title: 'ORMs and DB', slug: 'orms-db', order: 2, content: '' },
-      { id: 'pkg-03', module_id: 'packages', title: 'Utilities', slug: 'utilities', order: 3, content: '' },
+      { id: 'gin-01', module_id: 'gin', title: 'Getting Started', slug: 'gin-getting-started', order: 1, content: '' },
+      { id: 'gin-02', module_id: 'gin', title: 'Middleware', slug: 'gin-middleware', order: 2, content: '' },
+      { id: 'gin-03', module_id: 'gin', title: 'Request Binding & Validation', slug: 'gin-request-binding', order: 3, content: '' },
+      { id: 'gin-04', module_id: 'gin', title: 'Advanced Patterns', slug: 'gin-advanced', order: 4, content: '' },
+    ]
+  },
+  {
+    id: 'echo',
+    title: 'Echo Framework',
+    description: 'High-performance, minimalist Go web framework with HTTP/2 support',
+    lessons: [
+      { id: 'echo-01', module_id: 'echo', title: 'Getting Started', slug: 'echo-getting-started', order: 1, content: '' },
+      { id: 'echo-02', module_id: 'echo', title: 'Middleware', slug: 'echo-middleware', order: 2, content: '' },
+      { id: 'echo-03', module_id: 'echo', title: 'Request & Response', slug: 'echo-request-response', order: 3, content: '' },
+      { id: 'echo-04', module_id: 'echo', title: 'Advanced Patterns', slug: 'echo-advanced', order: 4, content: '' },
+    ]
+  },
+  {
+    id: 'fiber',
+    title: 'Fiber Framework',
+    description: 'Express-inspired, ultra-fast web framework built on Fasthttp',
+    lessons: [
+      { id: 'fiber-01', module_id: 'fiber', title: 'Getting Started', slug: 'fiber-getting-started', order: 1, content: '' },
+      { id: 'fiber-02', module_id: 'fiber', title: 'Middleware', slug: 'fiber-middleware', order: 2, content: '' },
+      { id: 'fiber-03', module_id: 'fiber', title: 'Request & Response', slug: 'fiber-request-response', order: 3, content: '' },
+      { id: 'fiber-04', module_id: 'fiber', title: 'Advanced Patterns', slug: 'fiber-advanced', order: 4, content: '' },
+    ]
+  },
+  {
+    id: 'chi',
+    title: 'Chi Router',
+    description: 'Lightweight, idiomatic router 100% compatible with net/http',
+    lessons: [
+      { id: 'chi-01', module_id: 'chi', title: 'Getting Started', slug: 'chi-getting-started', order: 1, content: '' },
+      { id: 'chi-02', module_id: 'chi', title: 'Middleware', slug: 'chi-middleware', order: 2, content: '' },
+      { id: 'chi-03', module_id: 'chi', title: 'Advanced Routing', slug: 'chi-advanced-routing', order: 3, content: '' },
+      { id: 'chi-04', module_id: 'chi', title: 'Patterns & Testing', slug: 'chi-patterns', order: 4, content: '' },
+    ]
+  },
+  {
+    id: 'db-tools',
+    title: 'Database & Utilities',
+    description: 'ORMs, database drivers, and essential third-party utilities',
+    lessons: [
+      { id: 'pkg-02', module_id: 'db-tools', title: 'ORMs and DB', slug: 'orms-db', order: 1, content: '' },
+      { id: 'pkg-03', module_id: 'db-tools', title: 'Utilities', slug: 'utilities', order: 2, content: '' },
     ]
   },
   {
@@ -839,6 +870,7 @@ export function LessonView() {
           initialCode={selectedChallenge.starterCode}
           expectedOutput={selectedChallenge.expectedOutput}
           validationPattern={selectedChallenge.validationPattern}
+          testCode={selectedChallenge.testCode}
           challengeId={selectedChallenge.id}
           title={selectedChallenge.title}
           description={selectedChallenge.description}

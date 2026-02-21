@@ -153,7 +153,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     
     // Auto-complete parent lesson if all sub-lessons are done
     if (parentLessonId && !completedLessons.includes(parentLessonId)) {
-      // Check if this sub-lesson's parent has all sub-lessons completed
+      // Check if this sub-lesson's parent has all sub-lessons completed.
+      // Note: framework modules (gin, echo, fiber, chi) are full modules with their
+      // own top-level lessons — they don't use the sub-lesson grouping mechanism here.
       const basicsSubLessons = ['basic-types', 'type-conversion', 'custom-types']
       const functionsSubLessons = ['function-declarations', 'multiple-returns', 'variadic-functions']
       const controlFlowSubLessons = ['if-else', 'switch-statements', 'loops']
@@ -167,7 +169,6 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       const middlewareSubLessons = ['middleware-pattern', 'common-middleware', 'middleware-third-party']
       const encodingSubLessons = ['json-encoding', 'xml-toml', 'gob-encoding']
       const httpSubLessons = ['http-client', 'context-basics', 'context-advanced']
-      const frameworkSubLessons = ['gin-framework', 'echo-framework', 'fiber-framework']
       const profilingSubLessons = ['cpu-profiling', 'memory-profiling-p', 'pprof-tool']
       const deploymentSubLessons = ['docker-basics', 'multistage-builds', 'cicd-integration']
       
@@ -185,7 +186,6 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         { group: middlewareSubLessons, parentId: 'web-03' },
         { group: encodingSubLessons, parentId: 'stdlib-02' },
         { group: httpSubLessons, parentId: 'stdlib-03' },
-        { group: frameworkSubLessons, parentId: 'pkg-01' },
         { group: profilingSubLessons, parentId: 'polish-01' },
         { group: deploymentSubLessons, parentId: 'polish-03' },
       ]
@@ -242,7 +242,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       'testing': ['t-01', 't-02', 't-03', 't-04'],
       'webservices': ['w-01', 'w-02', 'w-03'],
       'stdlib': ['s-01', 's-02', 's-03'],
-      'packages': ['pkg-01', 'pkg-02', 'pkg-03'],
+      'gin': ['gin-01', 'gin-02', 'gin-03', 'gin-04'],
+      'echo': ['echo-01', 'echo-02', 'echo-03', 'echo-04'],
+      'fiber': ['fiber-01', 'fiber-02', 'fiber-03', 'fiber-04'],
+      'chi': ['chi-01', 'chi-02', 'chi-03', 'chi-04'],
+      'db-tools': ['pkg-02', 'pkg-03'],
       'polish': ['pol-01', 'pol-02', 'pol-03']
     }
     
@@ -264,7 +268,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       'testing': ['t-01', 't-02', 't-03', 't-04'],
       'webservices': ['w-01', 'w-02', 'w-03'],
       'stdlib': ['s-01', 's-02', 's-03'],
-      'packages': ['pkg-01', 'pkg-02', 'pkg-03'],
+      'gin': ['gin-01', 'gin-02', 'gin-03', 'gin-04'],
+      'echo': ['echo-01', 'echo-02', 'echo-03', 'echo-04'],
+      'fiber': ['fiber-01', 'fiber-02', 'fiber-03', 'fiber-04'],
+      'chi': ['chi-01', 'chi-02', 'chi-03', 'chi-04'],
+      'db-tools': ['pkg-02', 'pkg-03'],
       'polish': ['pol-01', 'pol-02', 'pol-03']
     }
     

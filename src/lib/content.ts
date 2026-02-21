@@ -62,6 +62,30 @@ import webFrameworks from '../content/modules/packages/01-web-frameworks.md?raw'
 import ormsDb from '../content/modules/packages/02-orms-db.md?raw'
 import utilities from '../content/modules/packages/03-utilities.md?raw'
 
+// Gin module
+import ginGettingStarted from '../content/modules/gin/01-getting-started.md?raw'
+import ginMiddleware from '../content/modules/gin/02-middleware.md?raw'
+import ginRequestBinding from '../content/modules/gin/03-request-binding.md?raw'
+import ginAdvanced from '../content/modules/gin/04-advanced.md?raw'
+
+// Echo module
+import echoGettingStarted from '../content/modules/echo/01-getting-started.md?raw'
+import echoMiddleware from '../content/modules/echo/02-middleware.md?raw'
+import echoRequestResponse from '../content/modules/echo/03-request-response.md?raw'
+import echoAdvanced from '../content/modules/echo/04-advanced.md?raw'
+
+// Fiber module
+import fiberGettingStarted from '../content/modules/fiber/01-getting-started.md?raw'
+import fiberMiddleware from '../content/modules/fiber/02-middleware.md?raw'
+import fiberRequestResponse from '../content/modules/fiber/03-request-response.md?raw'
+import fiberAdvanced from '../content/modules/fiber/04-advanced.md?raw'
+
+// Chi module
+import chiGettingStarted from '../content/modules/chi/01-getting-started.md?raw'
+import chiMiddleware from '../content/modules/chi/02-middleware.md?raw'
+import chiAdvancedRouting from '../content/modules/chi/03-advanced-routing.md?raw'
+import chiPatterns from '../content/modules/chi/04-patterns.md?raw'
+
 import profiling from '../content/modules/polish/01-profiling.md?raw'
 import security from '../content/modules/polish/02-security.md?raw'
 import deployment from '../content/modules/polish/03-deployment.md?raw'
@@ -134,10 +158,34 @@ export const lessonContent: Record<string, string> = {
   'encoding-packages': encodingPackages,
   'net-http-context': netHttpContext,
   
-  // Packages
+  // Packages (legacy overview)
   'web-frameworks': webFrameworks,
   'orms-db': ormsDb,
   'utilities': utilities,
+
+  // Gin module
+  'gin-getting-started': ginGettingStarted,
+  'gin-middleware': ginMiddleware,
+  'gin-request-binding': ginRequestBinding,
+  'gin-advanced': ginAdvanced,
+
+  // Echo module
+  'echo-getting-started': echoGettingStarted,
+  'echo-middleware': echoMiddleware,
+  'echo-request-response': echoRequestResponse,
+  'echo-advanced': echoAdvanced,
+
+  // Fiber module
+  'fiber-getting-started': fiberGettingStarted,
+  'fiber-middleware': fiberMiddleware,
+  'fiber-request-response': fiberRequestResponse,
+  'fiber-advanced': fiberAdvanced,
+
+  // Chi module
+  'chi-getting-started': chiGettingStarted,
+  'chi-middleware': chiMiddleware,
+  'chi-advanced-routing': chiAdvancedRouting,
+  'chi-patterns': chiPatterns,
   
   // Polish
   'profiling': profiling,
